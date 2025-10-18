@@ -12,12 +12,31 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
+    name: ${{ matrix.os }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build
+      - name: Build with GCC
         run: make
+        env:
+          CC: gcc
 
-      - name: Test
+      - name: Test with GCC
         run: make test
+        env:
+          CC: gcc
+
+      - name: Clean build artifacts
+        run: make clean
+
+      - name: Build with Clang
+        run: make
+        env:
+          CC: clang
+
+      - name: Test with Clang
+        run: make test
+        env:
+          CC: clang

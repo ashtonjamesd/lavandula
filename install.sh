@@ -1,8 +1,9 @@
+#!/bin/bash
+
 set -e
 
 REPO="ashtonjamesd/lavandula"
 INSTALL_DIR="/usr/local"
-TMP_DIR="/tmp/lavandula-install"
 LAVANDULA_LIB_DIR="/usr/local/lib/lavandula"
 
 RED='\033[0;31m'
@@ -54,25 +55,16 @@ check_dependencies() {
     # fi
 }
 
-download_source() {
-    log_info "Downloading source code..."
-
-    rm -rf "$TMP_DIR"
-    mkdir -p "$TMP_DIR"
-    cd "$TMP_DIR"
-
-    git clone "https://github.com/${REPO}.git" .
-    log_success "Source code downloaded"
-}
-
 install_repository() {
     log_info "Installing repository to ${LAVANDULA_LIB_DIR}..."
-    
+
+    sudo rm -r "${LAVANDULA_LIB_DIR}"
+
     sudo mkdir -p "${LAVANDULA_LIB_DIR}"
     
-    sudo cp -r "$TMP_DIR/." "${LAVANDULA_LIB_DIR}/"
+    sudo cp -r "." "${LAVANDULA_LIB_DIR}/"
     
-    if [[ "$OSTYPE" == "darwin"* ]]; then
+    if [[ -z "$OSTYPE" && "$OSTYPE" == "darwin"* ]]; then
         sudo chown -R root:wheel "${LAVANDULA_LIB_DIR}"
     else
         sudo chown -R root:root "${LAVANDULA_LIB_DIR}"
@@ -116,12 +108,6 @@ verify_installation() {
     fi
 }
 
-cleanup() {
-    log_info "Cleaning up temporary files..."
-    rm -rf "$TMP_DIR"
-    log_success "Cleanup completed"
-}
-
 show_usage() {
     echo ""
     log_success "🎉 Lavandula installation completed!"
@@ -152,11 +138,9 @@ main() {
     echo ""
 
     check_dependencies
-    download_source
     build_project
     install_project
     install_repository
-    cleanup
 
     show_usage
 }

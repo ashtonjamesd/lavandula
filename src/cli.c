@@ -123,6 +123,7 @@ int createHomeFile(Project *project) {
     const char *content =
         "#include \"../../lavandula/include/lavandula.h\"\n\n"
         "appRoute(home, ctx) {\n"
+        "    (void)ctx;\n"
         "    return ok(\"Hello, World!\", \"text/plain\");\n"
         "}\n";
 
@@ -162,6 +163,7 @@ int createMakefile(Project *project) {
         "SRCS_LAVANDULA = $(filter-out lavandula/main.c, $(shell find lavandula -name \"*.c\"))\n\n"
         "SRCS = app/app.c app/routes.c $(wildcard app/controllers/*.c) $(wildcard app/middleware/*.c)\n"
         "CFLAGS = -Wall -Wextra -lsqlite3 -Isrc -Ilavandula/include\n\n"
+        "CFLAGS = -Wall -Wextra -Werror -fstack-protector-strong -Wstrict-overflow -Wformat-security -Wno-unused-parameter -D_FORTIFY_SOURCE=2 -lsqlite3 -Isrc -Ilavandula/include\n\n"
         "all:\n"
         "\tgcc $(SRCS) $(SRCS_LAVANDULA) $(CFLAGS) -o a\n";
 
