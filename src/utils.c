@@ -12,7 +12,7 @@ char *readFile(const char *path) {
     }
 
     fseek(fptr, 0, SEEK_END);
-    int sz = ftell(fptr);
+    size_t sz = ftell(fptr);
     rewind(fptr);
 
     char *buff = malloc(sz + 1);
@@ -21,7 +21,10 @@ char *readFile(const char *path) {
         return NULL;
     }
 
-    fread(buff, 1, sz, fptr);
+    if (fread(buff, 1, sz, fptr) != sz) {
+        fclose(fptr);
+        return NULL;
+    }
     buff[sz] = '\0';
     fclose(fptr);
 

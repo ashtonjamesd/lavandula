@@ -169,8 +169,14 @@ void runServer(App *app) {
                 response.status, statusText, response.contentType, contentLength
         );
 
-        write(clientSocket, header, strlen(header));
-        write(clientSocket, response.content, contentLength);
+        if (write(clientSocket, header, strlen(header)) == -1) {
+            perror("write header failed");
+            exit(EXIT_FAILURE);
+        }
+        if (write(clientSocket, response.content, contentLength) == -1) {
+            perror("write content failed");
+            exit(EXIT_FAILURE);
+        }
 
         close(clientSocket);
     }

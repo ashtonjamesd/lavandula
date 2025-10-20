@@ -22,12 +22,14 @@ typedef struct {
 
 int runProject() {
     int hasBuilt = !buildProject();
-    if (!hasBuilt) return 1;
+    if (!hasBuilt) return EXIT_FAILURE;
 
-    system("./a");
-    system("rm ./a");
+    if (system("./a") == -1 || system("rm ./a") == -1) {
+        perror("system failed");
+        exit(EXIT_FAILURE);
+    }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 int buildProject() {
@@ -38,9 +40,8 @@ int buildProject() {
 int migrate() {
     // maybe store the path to the database (*.db) in lavandula.yml
     // since the CLI tool technically wont be able to access it, kinda
-    system("sqlite3 todo.db < output.sql");
 
-    return 0;
+    return system("sqlite3 todo.db < output.sql");
 }
 
 int help() {
@@ -163,7 +164,7 @@ int createMakefile(Project *project) {
         "SRCS_LAVANDULA = $(filter-out lavandula/main.c, $(shell find lavandula -name \"*.c\"))\n\n"
         "SRCS = app/app.c app/routes.c $(wildcard app/controllers/*.c) $(wildcard app/middleware/*.c)\n"
         "CFLAGS = -Wall -Wextra -lsqlite3 -Isrc -Ilavandula/include\n\n"
-        "CFLAGS = -Wall -Wextra -Werror -fstack-protector-strong -Wstrict-overflow -Wformat-security -Wno-unused-parameter -D_FORTIFY_SOURCE=2 -lsqlite3 -Isrc -Ilavandula/include\n\n"
+        "CFLAGS = -Wall -Wextra -Werror -fstack-protector-strong -Wstrict-overflow -Wformat-security -Wno-unused-parameter -D_FORTIFY_SOURCE=2 -O2 -lsqlite3 -Isrc -Ilavandula/include\n\n"
         "all:\n"
         "\tgcc $(SRCS) $(SRCS_LAVANDULA) $(CFLAGS) -o a\n";
 
@@ -251,7 +252,10 @@ int newProject(char *name) {
 
     char copyCommand[FILE_CONTENT_MAX];
     snprintf(copyCommand, sizeof(copyCommand), "cp -r /usr/local/lib/lavandula/src %s/lavandula", project.path);
-    system(copyCommand);
+    if (system(copyCommand) == -1) {
+        fprintf(stderr, "cp -r failed\n");
+        exit(EXIT_FAILURE);
+    }
 
     printf(GREEN "\n🎉 Lavandula project '%s' setup finished successfully!\n" RESET, project.name);
     printf(YELLOW "\nNext steps:\n" RESET);
