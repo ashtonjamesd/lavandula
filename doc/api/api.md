@@ -1,16 +1,11 @@
-# Lavandula API
-
-This document provides information on how to use the Lavandula API for web application development.
-
-
-## Overview
+## API Overview
 
 A starter application may look like this:
 
 ```c
 #include "lavandula.h"
 
-HttpResponse home(HttpRequest _) {
+appRoute(home, ctx) {
     return ok("Hello, World!");
 }
 

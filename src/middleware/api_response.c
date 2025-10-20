@@ -2,25 +2,31 @@
 
 #include "../include/lavandula.h"
 
-char *apiResponse(char *message, bool success) {
+// Creates a basic API response structure
+JsonBuilder *apiResponse(char *message, bool success) {
     JsonBuilder *builder = jsonBuilder();
     jsonPutBool(builder, "success", success);
     jsonPutString(builder, "message", message);
 
-    char *json = jsonStringify(builder);
-    freeJsonBuilder(builder);
-
-    return json;
+    return builder;
 }
 
+// For returning a simple success response
 HttpResponse apiSuccess() {
-    char *json = apiResponse("Request was successful.", true);
-    return ok(json, APPLICATION_JSON);
+    JsonBuilder *json = apiResponse("Request was successful.", true);
+    char *response = jsonStringify(json);
+    freeJsonBuilder(json);
+
+    return ok(response, APPLICATION_JSON);
 }
 
+// For returning a simple failure response
 HttpResponse apiFailure(char *message) {
-    char *json = apiResponse(message, false);
-    return internalServerError(json, APPLICATION_JSON);
+    JsonBuilder *json = apiResponse(message, false);
+    char *response = jsonStringify(json);
+    freeJsonBuilder(json);
+
+    return internalServerError(response, APPLICATION_JSON);
 }
 
 middleware(validateJsonBody, ctx, m) {

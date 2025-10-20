@@ -15,7 +15,7 @@ middleware(registerUserValidator, ctx, m) {
 
     char *error = validate(&v, ctx.body);
     if (error) {
-        return apiResponse(error);
+        return failure(error);
     }
     freeValidator(&v);
 
