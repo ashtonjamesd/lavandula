@@ -58,13 +58,13 @@ check_dependencies() {
 install_repository() {
     log_info "Installing repository to ${LAVANDULA_LIB_DIR}..."
 
-    sudo rm -r "${LAVANDULA_LIB_DIR}"
+    sudo rm -rf "${LAVANDULA_LIB_DIR}"
 
     sudo mkdir -p "${LAVANDULA_LIB_DIR}"
     
     sudo cp -r "." "${LAVANDULA_LIB_DIR}/"
     
-    if [[ -z "$OSTYPE" && "$OSTYPE" == "darwin"* ]]; then
+    if [[ -n "$OSTYPE" && "$OSTYPE" == "darwin"* ]]; then
         sudo chown -R root:wheel "${LAVANDULA_LIB_DIR}"
     else
         sudo chown -R root:root "${LAVANDULA_LIB_DIR}"
