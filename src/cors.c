@@ -7,7 +7,7 @@
 #define ORIGIN_LIMIT 50
 #define HEADER_LIMIT 50
 
-CorsConfig corsPolicy() {
+CorsConfig corsPolicy(void) {
     CorsConfig config = {
         .allowOrigin = malloc(ORIGIN_LIMIT * sizeof(char*)),
         .allowOriginCount = 0,
@@ -25,43 +25,55 @@ CorsConfig corsPolicy() {
     return config;
 }
 
-void allowOrigin(CorsConfig *config, char *origin) {
+void freeCorsPolicy(CorsConfig config) {
+    for (int i = 0; i < config.allowOriginCount; i++) {
+        free(config.allowOrigin[i]);
+    }
+    free(config.allowOrigin);
+
+    for (int i = 0; i < config.headerCount; i++) {
+        free(config.allowHeaders[i]);
+    }
+    free(config.allowHeaders);
+}
+
+void allowOrigin(CorsConfig *const config, const char *const origin) {
     if (config->allowOriginCount >= ORIGIN_LIMIT) {
         return;
     }
 
-    config->allowOrigin[config->allowOriginCount++] = origin;
+    config->allowOrigin[config->allowOriginCount++] = strdup(origin);
 }
 
-void allowMethod(CorsConfig *config, HttpMethod method) {
+void allowMethod(CorsConfig *const config, HttpMethod method) {
     if (config->methodCount < 6) {
         config->allowMethods[config->methodCount++] = method;
     }
 }
 
-void allowAnyOrigin(CorsConfig *config) {
+void allowAnyOrigin(CorsConfig *const config) {
     allowOrigin(config, "*");
 }
 
-void allowAnyMethod(CorsConfig *config) {
-    for (int i = 0; i < 6; i++) {
+void allowAnyMethod(CorsConfig *const config) {
+    for (int i = HTTP_GET; i <= HTTP_OPTIONS; i++) {
         allowMethod(config, i);
     }
 }
 
-void allowHeader(CorsConfig *config, char *header) {
+void allowHeader(CorsConfig *const config, const char *const header) {
     if (config->headerCount >= HEADER_LIMIT) {
         return;
     }
 
-    config->allowHeaders[config->headerCount++] = header;
+    config->allowHeaders[config->headerCount++] = strdup(header);
 }
 
-void allowAnyHeader(CorsConfig *config) {
+void allowAnyHeader(CorsConfig *const config) {
     allowHeader(config, "*");
 }
 
-CorsConfig corsAllowAll() {
+CorsConfig corsAllowAll(void) {
     CorsConfig config = corsPolicy();
     allowAnyOrigin(&config);
     allowAnyMethod(&config);

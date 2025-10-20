@@ -14,17 +14,18 @@ typedef struct {
     int        headerCount;
 } CorsConfig;
 
-CorsConfig corsPolicy();
+CorsConfig corsPolicy(void);
+void freeCorsPolicy(CorsConfig config);
 
-void allowOrigin(CorsConfig *config, char *origin);
-void allowMethod(CorsConfig *config, HttpMethod method);
+void allowOrigin(CorsConfig *const config, const char *const origin);
+void allowMethod(CorsConfig *const config, HttpMethod method);
 
-void allowAnyOrigin(CorsConfig *config);
-void allowAnyMethod(CorsConfig *config);
+void allowAnyOrigin(CorsConfig *const config);
+void allowAnyMethod(CorsConfig *const config);
 
-void allowHeader(CorsConfig *config, char *header);
-void allowAnyHeader(CorsConfig *config);
+void allowHeader(CorsConfig *const config, const char *const header);
+void allowAnyHeader(CorsConfig *const config);
 
-CorsConfig corsAllowAll();
+CorsConfig corsAllowAll(void);
 
 #endif
