@@ -46,7 +46,8 @@ See `/examples` for more.
 - SQLite integration
 - Built-in JSON library
 - Static file serving
-- Request validator library 
+- Request validator library
+- 'Hot Restart' mechanism
 
 ## In Progress
 
