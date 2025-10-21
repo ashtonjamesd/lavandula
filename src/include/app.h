@@ -17,8 +17,6 @@ struct App {
     CorsConfig          corsPolicy;
     DbContext         *dbContext;
     BasicAuthenticator auth;
-    bool               developmentMode;
-    volatile bool      shouldReload;
 };
 
 #endif
