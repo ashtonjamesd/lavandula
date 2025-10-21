@@ -4,4 +4,5 @@ SRCS = app/app.c app/routes.c $(wildcard app/controllers/*.c) $(wildcard app/mid
 CFLAGS = -Wall -Wextra -lsqlite3 -Isrc -Ilavandula/include
 
 all:
-	gcc $(SRCS) $(SRCS_LAVANDULA) $(CFLAGS) -o a
+	mkdir -p build
+	gcc $(SRCS) $(SRCS_LAVANDULA) $(CFLAGS) -o build/a
