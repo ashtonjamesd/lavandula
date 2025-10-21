@@ -33,7 +33,7 @@ int runProject() {
 }
 
 int buildProject() {
-    return system("make");
+    return system("make -s");
 }
 
 // migrations are being deferred because that sounds like a PAIN IN THE ASS

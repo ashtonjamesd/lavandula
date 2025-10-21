@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <pthread.h>
+#include <termios.h>
+#include <fcntl.h>
 
 #include "include/server.h"
 #include "include/http.h"
@@ -13,7 +16,25 @@
 #include "include/sql.h"
 #include "include/app.h"
 
+typedef enum {
+    STATE_RUNNING,
+    STATE_RESTARTING,
+    STATE_SHUTDOWN
+} ServerState;
+
+volatile ServerState serverState = STATE_RUNNING;
+
 #define BUFFER_SIZE 4096
+
+void set_nonblocking_input() {
+    struct termios ttystate;
+
+    tcgetattr(STDIN_FILENO, &ttystate);
+    ttystate.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
+
+    fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
+}
 
 HttpResponse defaultNotFoundController(RequestContext context) {
     (void)context;
@@ -52,8 +73,38 @@ void freeServer(Server *server) {
     freeRouter(&server->router);
 }
 
+void* key_listener(void* arg) {
+    (void)arg;
+
+    while (serverState == STATE_RUNNING) {
+        int ch = getchar();
+        if (ch != EOF) {
+            if (ch == 'r') {
+                printf("restarting server...\n");
+                serverState = STATE_RESTARTING;
+                return NULL;
+            } else if (ch == 'q') {
+                printf("shutting down server...\n");
+                serverState = STATE_SHUTDOWN;
+                return NULL;
+            }
+        }
+        usleep(10000);
+    }
+    return NULL;
+}
+
+
 void runServer(App *app) {
     if (!app) return;
+
+    pthread_t thread_id;
+    set_nonblocking_input();
+
+    if (pthread_create(&thread_id, NULL, key_listener, NULL)) {
+        perror("Failed to create thread");
+        return;
+    }
 
     app->server.fileDescriptor = socket(AF_INET, SOCK_STREAM, 0);
     if (app->server.fileDescriptor < 0) {
@@ -87,16 +138,41 @@ void runServer(App *app) {
         exit(EXIT_FAILURE);
     }
 
-    printf("Lavandula Server is running! -> http://127.0.0.1:%d\n", app->server.port);
+    printf("\n");
+    printf("┌───────────────────────────────────────────────┐\n");
+    printf("│         🌿 Lavandula Server is RUNNING        │\n");
+    printf("├───────────────────────────────────────────────┤\n");
+    printf("│ Listening on: http://127.0.0.1:%-12d   │\n", app->server.port);
+    printf("│                                               │\n");
+    printf("│ Controls:                                     │\n");
+    printf("│   • Press 'r' to reload the server            │\n");
+    printf("│   • Press 'q' to shut down                    │\n");
+    printf("└───────────────────────────────────────────────┘\n\n");
 
-    while (1) {
+
+    int flags = fcntl(app->server.fileDescriptor, F_GETFL, 0);
+    if (flags == -1) {
+        perror("fcntl get flags failed");
+        exit(EXIT_FAILURE);
+    }
+    if (fcntl(app->server.fileDescriptor, F_SETFL, flags | O_NONBLOCK) == -1) {
+        perror("fcntl set non-blocking failed");
+        exit(EXIT_FAILURE);
+    }
+
+    while (serverState == STATE_RUNNING) {
         struct sockaddr_in clientAddr;
         socklen_t clientLen = sizeof(clientAddr);
 
         int clientSocket = accept(app->server.fileDescriptor, (struct sockaddr *)&clientAddr, &clientLen);
         if (clientSocket < 0) {
-            perror("accept failed");
-            continue;
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                usleep(10000);
+                continue;
+            } else {
+                perror("accept failed");
+                continue;
+            }
         }
 
         char buffer[BUFFER_SIZE] = {0}; // oops
@@ -128,7 +204,6 @@ void runServer(App *app) {
         }
 
         free(pathOnly);
-
 
         RequestContext context = requestContext(app, request);
 
@@ -179,5 +254,23 @@ void runServer(App *app) {
         }
 
         close(clientSocket);
+    }
+
+    freeServer(&app->server);
+    pthread_join(thread_id, NULL);
+
+    if (serverState == STATE_RESTARTING) {
+        int result = system("make -s");
+        if (result != 0) {
+            fprintf(stderr, "Build failed.\n");
+            exit(1);
+        }
+
+        char *args[] = {"./build/lavu", NULL};
+        execvp(args[0], args);
+        perror("execvp failed");
+        exit(1);
+    } else if (serverState == STATE_SHUTDOWN) {
+        exit(0);
     }
 }

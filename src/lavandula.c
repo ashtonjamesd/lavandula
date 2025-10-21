@@ -28,7 +28,9 @@ AppBuilder createBuilder() {
 
 App createApp() {
     App app = {
-        .port = 3000
+        .port = 3000,
+        .developmentMode = false,
+        .shouldReload = false,
     };
 
     initAppMiddleware(&app);
