@@ -1,15 +1,13 @@
 #include "include/lavandula.h"
 
 appRoute(home, ctx) {
-    return ok("Hello, World!", TEXT_PLAIN);
+    (void)ctx;
+    return apiFailure("An error occurred.");
 }
 
 int main() {
     AppBuilder builder = createBuilder();
     App app = build(builder);
-
-    // Logging middleware example
-    useMiddleware(&builder, consoleLogger);
 
     get(&app, "/home", home);
 
