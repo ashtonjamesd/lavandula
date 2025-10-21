@@ -22,7 +22,7 @@ int main() {
 
 See `/examples` for more.
 
-**![Join the Discord server](https://discord.gg/5H3kkazG)**
+**[Join the Discord server](https://discord.gg/5H3kkazG)**
 
 [![Lavandula](https://github.com/ashtonjamesd/lavandula/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/ashtonjamesd/lavandula/actions/workflows/ci.yaml)
 
@@ -152,3 +152,4 @@ Some places to start:
 
 
 Lavandula is registered under the MIT License.
+
