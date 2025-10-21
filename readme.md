@@ -5,7 +5,6 @@
 
 **Lavandula** is a lightweight, fast, and intuitive C web framework designed for building modern web applications quickly. It focuses on simplicity, performance, and productivity, providing all the essentials without the bloat of heavier frameworks.
 
-
 ```c
 #include "lavandula.h" 
 
@@ -23,7 +22,7 @@ int main() {
 
 See `/examples` for more.
 
-<br/>
+**![Join the Discord server](https://discord.gg/5H3kkazG)**
 
 [![Lavandula](https://github.com/ashtonjamesd/lavandula/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/ashtonjamesd/lavandula/actions/workflows/ci.yaml)
 
@@ -149,6 +148,7 @@ Some places to start:
 
 
 ## License
+
 
 
 Lavandula is registered under the MIT License.
