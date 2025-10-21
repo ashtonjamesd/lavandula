@@ -21,7 +21,7 @@ int main() {
 
     // sets up middleware specific to this route
     Route homeRoute = root(&app, home);
-    useRouteMiddleware(&homeRoute, logger);
+    useRouteMiddleware(&homeRoute, consoleLogger);
 
     runApp(&app);
 }

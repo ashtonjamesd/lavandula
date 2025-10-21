@@ -5,10 +5,9 @@
 
 /*
 ** Provides a standardized API response in JSON format.
-** 
 */
 
-middleware(validateJsonBody, ctx, m);
+JsonBuilder *apiResponse(char *message, bool success);
 
 HttpResponse apiSuccess();
 HttpResponse apiFailure(char *message);

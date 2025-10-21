@@ -4,14 +4,13 @@
 #include "middleware/middleware.h"
 
 void registerRoutes(App *app) {
-    Route registerUserRoute = get(app, "/api/register", registerUser);
+    Route registerUserRoute = post(app, "/api/register", registerUser);
     useLocalMiddleware(&registerUserRoute, registerUserValidator);
 
     Route loginUserRoute = post(app, "/api/login", loginUser);
     useLocalMiddleware(&loginUserRoute, loginUserValidator);
 
-    Route logoutUserRoute = post(app, "/api/logout", logoutUser);
-    useLocalMiddleware(&logoutUserRoute, logoutUserValidator);
+    post(app, "/api/logout", logoutUser);
 
     get(app, "/api/getFoodBanks", getFoodBanks);
     get(app, "/api/getFoodBank", getFoodBank);

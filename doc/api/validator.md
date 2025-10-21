@@ -13,11 +13,9 @@ middleware(registerUserValidator, ctx, m) {
     required(&v, "username");
     required(&v, "password");
 
-    char *error = validate(&v, ctx.body);
-    if (error) {
-        return failure(error);
+    if (!validate(&v, ctx.body)) {
+        return apiFailure(v.error);
     }
-    freeValidator(&v);
 
     return next(ctx, m);
 }

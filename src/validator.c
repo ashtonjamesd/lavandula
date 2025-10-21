@@ -37,16 +37,22 @@ void required(JsonValidator *v, const char *field) {
     addRule(v, field, message);
 }
 
-char *validate(JsonValidator *v, JsonBuilder *body) {
-    if (!body) return "Request body is missing or malformed.";
+bool validate(JsonValidator *v, JsonBuilder *body) {
+    if (!body) {
+        v->error = "Request body is missing or malformed.";
+        return false;
+    }
 
     for (int i = 0; i < v->ruleCount; i++) {
         JsonValidationRule rule = v->rules[i];
 
         if (!validateRequired(body, rule.field)) {
-            return rule.message;
+            v->error = rule.message;
+            return false;
         }
     }
 
-    return NULL;
+    freeValidator(v);
+
+    return true;
 }

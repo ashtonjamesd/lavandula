@@ -9,7 +9,7 @@ int main() {
     App app = build(builder);
 
     // Logging middleware example
-    useMiddleware(&builder, logger);
+    useMiddleware(&builder, consoleLogger);
 
     get(&app, "/home", home);
 

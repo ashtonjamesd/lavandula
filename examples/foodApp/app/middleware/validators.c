@@ -10,11 +10,9 @@ middleware(registerUserValidator, ctx, m) {
     required(&v, "name");
     required(&v, "password");
 
-    char *error = validate(&v, ctx.body);
-    if (error) {
-        return apiFailure(error);
+    if (!validate(&v, ctx.body)) {
+        return apiFailure(v.error);
     }
-    freeValidator(&v);
 
     return next(ctx, m);
 }
@@ -25,11 +23,9 @@ middleware(loginUserValidator, ctx, m) {
     required(&v, "username");
     required(&v, "password");
 
-    char *error = validate(&v, ctx.body);
-    if (error) {
-        return apiFailure(error);
+    if (!validate(&v, ctx.body)) {
+        return apiFailure(v.error);
     }
-    freeValidator(&v);
 
     return next(ctx, m);
 }
