@@ -11,6 +11,7 @@ typedef struct {
     
     int port;
     int fileDescriptor;
+    int writingThreads;
 } Server;
 
 Server initServer(int port);

@@ -9,6 +9,8 @@
 #include <termios.h>
 #include <fcntl.h>
 
+#include <signal.h>
+
 #include "include/server.h"
 #include "include/http.h"
 #include "include/middleware.h"
@@ -244,19 +246,27 @@ void runServer(App *app) {
                 response.status, statusText, response.contentType, contentLength
         );
 
-        if (write(clientSocket, header, strlen(header)) == -1) {
-            perror("write header failed");
-            exit(EXIT_FAILURE);
-        }
-        if (write(clientSocket, response.content, contentLength) == -1) {
-            perror("write content failed");
-            exit(EXIT_FAILURE);
+        signal(SIGPIPE, SIG_IGN);
+
+        int err = 0;
+        if(app->server.writingThreads == 0) {
+          app->server.writingThreads++;
+          if ((err = write(clientSocket, header, strlen(header))) == -1) {
+              fprintf(stderr, "write header failed with errno(%d)", err);
+          }
+
+          if ((err = write(clientSocket, response.content, contentLength)) == -1) {
+              perror("write content failed");
+          }
+        app->server.writingThreads--;
         }
 
         close(clientSocket);
     }
 
-    freeServer(&app->server);
+
+     if(app->server.writingThreads == 0)
+      freeServer(&app->server);
     pthread_join(thread_id, NULL);
 
     if (serverState == STATE_RESTARTING) {
