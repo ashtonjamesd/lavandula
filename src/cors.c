@@ -44,7 +44,7 @@ void allowOrigin(CorsConfig *const config, const char *const origin) {
 
     config->allowOrigin[config->allowOriginCount++] = strdup(origin);
 
-    if (config->allowOrigin[config->allowOriginCount - 1]) {
+    if (!config->allowOrigin[config->allowOriginCount - 1]) {
         fprintf(stderr, "Fatal: out of memory\n");
         exit(EXIT_FAILURE);
     }

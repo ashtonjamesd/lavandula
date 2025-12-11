@@ -172,7 +172,7 @@ Json jsonString(char *value) {
         .value = strdup(value),
     };
 
-    if (!json.key) {
+    if (!json.value) {
         fprintf(stderr, "Fatal: out of memory\n");
         exit(EXIT_FAILURE);
     }

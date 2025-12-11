@@ -18,7 +18,6 @@ int main() {
     assertionsFailed = 0;
     
     runLexerTests();
-    // run_parser_tests();
     runHttpTests();
     runUtilsTests();
     runAuthTests();

@@ -6,7 +6,7 @@
 
 void initAppMiddleware(App *app) {
     app->middleware = (MiddlewareHandler) {
-        .handlers = malloc(sizeof(MiddlewareHandler) * 1),
+        .handlers = malloc(sizeof(MiddlewareFunc) * 1),
         .count = 0,
         .capacity = 1,
         .current = 0,
