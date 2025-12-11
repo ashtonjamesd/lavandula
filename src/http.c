@@ -365,6 +365,11 @@ HttpParser parseRequest(char *request) {
         .position = 0,
     };
 
+    if (!parser.requestBuffer) {
+        fprintf(stderr, "Fatal: out of memory\n");
+        exit(EXIT_FAILURE);
+    }
+
     char method[16];
     int methodIndex = 0;
     while (!isEnd(parser) && currentChar(&parser) != ' ' && methodIndex < (int)sizeof(method) - 1) {

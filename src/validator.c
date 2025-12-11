@@ -24,6 +24,16 @@ void addRule(JsonValidator *v, const char *field, const char *message) {
     v->rules[v->ruleCount].field = strdup(field);
     v->rules[v->ruleCount].message = strdup(message);
 
+    if (v->rules[v->ruleCount].field) {
+        fprintf(stderr, "Fatal: out of memory\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (v->rules[v->ruleCount].message) {
+        fprintf(stderr, "Fatal: out of memory\n");
+        exit(EXIT_FAILURE);
+    }
+
     v->ruleCount++;
 }
 

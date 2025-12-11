@@ -80,15 +80,27 @@ void addJson(JsonBuilder *builder, Json json) {
 }
 
 static Json makeJson(char *key, JsonType type) {
-    return (Json){
+    Json json = (Json){
         .type = type,
         .key = strdup(key),
     };
+
+    if (!json.key) {
+        fprintf(stderr, "Fatal: out of memory\n");
+        exit(EXIT_FAILURE);
+    }
+
+    return json;
 }
 
 void jsonPutString(JsonBuilder *builder, char *key, char *value) {
     Json json = makeJson(key, JSON_STRING);
     json.value = strdup(value);
+
+    if (!json.value) {
+        fprintf(stderr, "Fatal: out of memory\n");
+        exit(EXIT_FAILURE);
+    }
 
     addJson(builder, json);
 }
@@ -122,6 +134,11 @@ void jsonPutObject(JsonBuilder *builder, char *key, JsonBuilder *object) {
 
 void jsonPutJson(JsonBuilder *builder, char *key, Json value) {
     value.key = strdup(key);
+    if (!value.key) {
+        fprintf(stderr, "Fatal: out of memory\n");
+        exit(EXIT_FAILURE);
+    }
+
     addJson(builder, value);
 }
 
@@ -149,11 +166,18 @@ Json jsonBool(bool value) {
 }
 
 Json jsonString(char *value) {
-    return (Json) {
+    Json json = (Json) {
         .type = JSON_STRING,
         .key = NULL,
         .value = strdup(value),
     };
+
+    if (!json.key) {
+        fprintf(stderr, "Fatal: out of memory\n");
+        exit(EXIT_FAILURE);
+    }
+
+    return json;
 }
 
 Json jsonObject(JsonBuilder *builder) {

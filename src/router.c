@@ -567,6 +567,11 @@ Route route(Router *router, HttpMethod method, char *path, Controller controller
         .middleware = middleware
     };
 
+    if (!route.path) {
+        fprintf(stderr, "Fatal: out of memory\n");
+        exit(EXIT_FAILURE);
+    }
+
     if (router->routeCount >= router->routeCapacity) {
         router->routeCapacity *= 2;
         router->routes = realloc(router->routes, sizeof(Route) * router->routeCapacity);

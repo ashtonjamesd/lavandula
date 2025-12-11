@@ -175,7 +175,8 @@ void runServer(App *app) {
             }
         }
 
-        char buffer[BUFFER_SIZE] = {0}; // oops
+        // TODO: implement dynamic buffer resizing and reading request in chunks
+        char buffer[BUFFER_SIZE] = {0};
         ssize_t bytesRead = read(clientSocket, buffer, sizeof(buffer) - 1);
         if (bytesRead < 0) {
             perror("read failed");
@@ -187,6 +188,11 @@ void runServer(App *app) {
         HttpRequest request = parser.request;
 
         char *pathOnly = strdup(request.resource);
+        if (!pathOnly) {
+            fprintf(stderr, "Fatal: out of memory\n");
+            exit(EXIT_FAILURE);
+        }
+        
         char *queryStart = strchr(pathOnly, '?');
         if (queryStart) {
             *queryStart = '\0';
@@ -228,6 +234,10 @@ void runServer(App *app) {
 
         if (!response.content) {
             response.content = strdup("");
+            if (!response.content) {
+                fprintf(stderr, "Fatal: out of memory\n");
+                exit(EXIT_FAILURE);
+            }
         }
 
         int contentLength = strlen(response.content);

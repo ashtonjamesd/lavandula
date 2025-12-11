@@ -69,6 +69,12 @@ static Token newToken(const char *lexeme, TokenType type) {
         .lexeme = strdup(lexeme),
         .type = type,
     };
+
+    if (!token.lexeme) {
+        fprintf(stderr, "Fatal: out of memory\n");
+        exit(EXIT_FAILURE);
+    }
+
     return token;
 }
 
@@ -252,6 +258,11 @@ void dotenv(char *path) {
             .key = strdup(keyToken.lexeme),
             .value = strdup(valueToken.lexeme)
         };
+
+        if (!entry.key || !entry.value) {
+            fprintf(stderr, "Fatal: out of memory\n");
+            exit(EXIT_FAILURE);
+        }
 
         if (map.entryCount >= map.entryCapacity) {
             map.entryCapacity *= 2;

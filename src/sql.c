@@ -137,6 +137,11 @@ DbResult *dbQueryRows(DbContext *db, const char *query, DbParam *params, int par
 
             row->colNames[i] = strdup(name);
             row->colValues[i] = val ? strdup((const char *)val) : strdup("NULL");
+
+            if (!row->colNames[i] || !row->colValues[i]) {
+                fprintf(stderr, "Fatal: out of memory\n");
+                exit(EXIT_FAILURE);
+            }
         }
 
         rowCount++;

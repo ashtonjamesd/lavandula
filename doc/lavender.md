@@ -1,5 +1,9 @@
 # Lavender ORM
 
+! This is currently not supported and still under development !
+
+<br/>
+
 Lavender is the ORM layer for Lavandula. It provides a mechanism for running migrations on your database.
 
 The following lavender schema represents a todo model with three fields. 

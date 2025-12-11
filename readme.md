@@ -2,8 +2,7 @@
 
 <br/>
 
-
-**Lavandula** is a lightweight, fast, and intuitive C web framework designed for building modern web applications quickly. It focuses on simplicity, performance, and productivity, providing all the essentials without the bloat of heavier frameworks.
+**Lavandula** is a lightweight, fast, and intuitive C web framework designed for building small web applications quickly. It focuses on simplicity, performance, and productivity.
 
 ```c
 #include "lavandula.h" 
@@ -21,8 +20,6 @@ int main() {
 ```
 
 See `/examples` for more.
-
-**[Join the Discord server](https://discord.gg/5H3kkazG)**
 
 [![Lavandula](https://github.com/ashtonjamesd/lavandula/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/ashtonjamesd/lavandula/actions/workflows/ci.yaml)
 
@@ -53,14 +50,14 @@ See `/examples` for more.
 - CORS policy configuration
 - Multithreading
 - TLS
-- PostgreSL, MySQL integrations, etc
+- PostgreSQL, MySQL integrations, etc
 - Rate Limiting
 - Session cookies
 
 
 ## Installation
 
-To install Lavandula, follow these setps.
+To install Lavandula, follow these steps.
 
 1. Clone the repository
 

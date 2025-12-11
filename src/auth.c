@@ -97,6 +97,7 @@ bool checkBasicCredentials(BasicAuthenticator *auth, const char *const base64) {
     }
     return false;
 }
+
 void freeBasicAuth(BasicAuthenticator auth) {
     if (!auth.credentials) {
         return;
