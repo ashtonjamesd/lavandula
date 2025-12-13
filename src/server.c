@@ -15,6 +15,8 @@
 #include "include/request_context.h"
 #include "include/sql.h"
 #include "include/app.h"
+#include "include/arena.h"
+#include "include/lavu_error.h"
 
 typedef enum {
     STATE_RUNNING,
@@ -184,13 +186,26 @@ void runServer(App *app) {
             continue;
         }
 
+        // Create per-request arena for efficient memory management
+        Arena *requestArena = arenaCreate();
+        if (!requestArena) {
+            fprintf(stderr, "Warning: failed to create request arena, falling back to malloc\n");
+        }
+
         HttpParser parser = parseRequest(buffer);
         HttpRequest request = parser.request;
 
-        char *pathOnly = strdup(request.resource);
+        // Use arena for path string if available, otherwise fall back to strdup
+        char *pathOnly = requestArena 
+            ? arenaStrdup(requestArena, request.resource)
+            : strdup(request.resource);
+        
         if (!pathOnly) {
-            fprintf(stderr, "Fatal: out of memory\n");
-            exit(EXIT_FAILURE);
+            fprintf(stderr, "Error: out of memory for path\n");
+            freeParser(&parser);
+            arenaDestroy(requestArena);
+            close(clientSocket);
+            continue;
         }
         
         char *queryStart = strchr(pathOnly, '?');
@@ -209,9 +224,13 @@ void runServer(App *app) {
             }
         }
 
-        free(pathOnly);
+        // Only free pathOnly if we used strdup
+        if (!requestArena) {
+            free(pathOnly);
+        }
 
         RequestContext context = requestContext(app, request);
+        context.arena = requestArena;  // Attach arena to context for middleware/handlers
 
         context.hasBody = parser.isValid && request.bodyLength > 0;
         context.body = context.hasBody ? jsonParse(request.body) : NULL;
@@ -232,15 +251,16 @@ void runServer(App *app) {
 
         freeJsonBuilder(context.body);
 
+        // Handle NULL response content
+        const char *responseContent = response.content ? response.content : "";
+        bool needsFreeContent = false;
+        
         if (!response.content) {
-            response.content = strdup("");
-            if (!response.content) {
-                fprintf(stderr, "Fatal: out of memory\n");
-                exit(EXIT_FAILURE);
-            }
+            // Use arena if available for empty string, otherwise use static
+            responseContent = "";
         }
 
-        int contentLength = strlen(response.content);
+        int contentLength = strlen(responseContent);
 
         const char *statusText = httpStatusCodeToStr(response.status);
 
@@ -256,13 +276,19 @@ void runServer(App *app) {
 
         if (write(clientSocket, header, strlen(header)) == -1) {
             perror("write header failed");
-            exit(EXIT_FAILURE);
-        }
-        if (write(clientSocket, response.content, contentLength) == -1) {
+        } else if (write(clientSocket, responseContent, contentLength) == -1) {
             perror("write content failed");
-            exit(EXIT_FAILURE);
         }
 
+        if (needsFreeContent && response.content) {
+            free(response.content);
+        }
+
+        freeParser(&parser);
+        
+        // Destroy per-request arena - frees all arena allocations at once
+        arenaDestroy(requestArena);
+        
         close(clientSocket);
     }
 

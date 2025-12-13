@@ -10,6 +10,9 @@ void runAuthTests();
 void runJsonTests();
 void runBase64Tests();
 void runCorsTests();
+void runArenaTests();
+void runErrorTests();
+void runValidatorTests();
 
 int main() {
     testsRan = 0;
@@ -24,6 +27,9 @@ int main() {
     runJsonTests();
     runBase64Tests();
     runCorsTests();
+    runArenaTests();
+    runErrorTests();
+    runValidatorTests();
 
     printf("=== Lavandula Test Results ===\n");
     testResults();

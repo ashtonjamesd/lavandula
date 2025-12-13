@@ -6,5 +6,8 @@ RequestContext requestContext(App *app, HttpRequest request) {
         .app = app,
         .request = request,
         .db = app->dbContext,
+        .body = NULL,
+        .hasBody = false,
+        .arena = NULL,  // Set by server after creation
     };
 }
