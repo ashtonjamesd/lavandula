@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "include/router.h"
-#include "include/server.h"
+#include "../include/router.h"
+#include "../include/server.h"
 
 // 1xx Informational responses
 HttpResponse httpContinue(char *content, char *contentType) {

@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "include/auth.h"
-#include "include/base64.h"
-#include "include/router.h"
-#include "include/app.h"
+#include "../include/auth.h"
+#include "../include/base64.h"
+#include "../include/router.h"
+#include "../include/app.h"
 
 BasicAuthenticator initBasicAuth(void) {
     BasicAuthenticator auth = {

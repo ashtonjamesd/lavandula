@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "include/middleware.h"
+#include "../include/middleware.h"
 
 HttpResponse next(RequestContext context, MiddlewareHandler *middleware) {
     while (middleware->current < middleware->count) {

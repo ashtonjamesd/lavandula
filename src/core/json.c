@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "include/json.h"
+#include "../include/json.h"
 
 JsonBuilder *jsonBuilder() {
     JsonBuilder *builder = malloc(sizeof(JsonBuilder));

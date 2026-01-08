@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "include/utils.h"
+#include "../include/utils.h"
 
 char *readFile(const char *path) {
     FILE *fptr = fopen(path, "r");

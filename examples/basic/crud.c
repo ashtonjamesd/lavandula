@@ -1,5 +1,5 @@
 
-#include "include/lavandula.h"
+#include "../include/lavandula.h"
 
 typedef struct {
     int id;

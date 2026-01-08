@@ -4,9 +4,9 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "include/cli.h"
-#include "include/version.h"
-#include "include/utils.h"
+#include "../include/cli.h"
+#include "../include/version.h"
+#include "../include/utils.h"
 
 #define GREEN "\x1b[32m"
 #define YELLOW "\x1b[33m"

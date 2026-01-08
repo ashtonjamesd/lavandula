@@ -9,12 +9,12 @@
 #include <termios.h>
 #include <fcntl.h>
 
-#include "include/server.h"
-#include "include/http.h"
-#include "include/middleware.h"
-#include "include/request_context.h"
-#include "include/sql.h"
-#include "include/app.h"
+#include "../include/server.h"
+#include "../include/http.h"
+#include "../include/middleware.h"
+#include "../include/request_context.h"
+#include "../include/sql.h"
+#include "../include/app.h"
 
 typedef enum {
     STATE_RUNNING,

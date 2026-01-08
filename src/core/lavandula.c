@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "include/lavandula.h"
+#include "../include/lavandula.h"
 
 void initAppMiddleware(App *app) {
     app->middleware = (MiddlewareHandler) {

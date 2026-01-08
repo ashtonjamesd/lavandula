@@ -1,6 +1,6 @@
 #include "../src/include/lavandula.h"
 
-#include "include/lavandula.h"
+#include "../include/lavandula.h"
 
 appRoute(home, ctx) {
     return ok("Hello, World!", TEXT_PLAIN);

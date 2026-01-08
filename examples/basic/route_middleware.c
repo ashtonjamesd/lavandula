@@ -1,4 +1,4 @@
-#include "include/lavandula.h"
+#include "../include/lavandula.h"
 
 HttpResponse globalMiddleware(RequestContext ctx, MiddlewareHandler *middleware) {
     printf("Global middleware: Before request processing\n");

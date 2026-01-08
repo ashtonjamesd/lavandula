@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#include "include/dotenv.h"
-#include "include/utils.h"
+#include "../include/dotenv.h"
+#include "../include/utils.h"
 
 typedef enum {
     TOKEN_IDENTIFIER,

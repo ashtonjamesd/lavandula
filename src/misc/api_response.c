@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-#include "include/lavandula.h"
+#include "../include/lavandula.h"
 
 // Creates a basic API response structure
 JsonBuilder *apiResponse(char *message, bool success) {

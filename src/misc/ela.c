@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "include/ela.h"
+#include "../include/ela.h"
 
 ElaParser newElaParser(const char *source) {
     ElaParser parser = {

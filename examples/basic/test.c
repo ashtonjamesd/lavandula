@@ -1,4 +1,4 @@
-#include "include/lavandula.h"
+#include "../include/lavandula.h"
 
 void testOne() {
     int x = 10;

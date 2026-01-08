@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "include/lavandula_test.h"
+#include "../include/lavandula_test.h"
 
 int testsRan = 0;
 int testsFailed = 0;

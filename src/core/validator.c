@@ -1,6 +1,6 @@
-#include "include/middleware.h"
-#include "include/api_response.h"
-#include "include/validator.h"
+#include "../include/middleware.h"
+#include "../include/api_response.h"
+#include "../include/validator.h"
 
 JsonValidator createValidator() {
     return (JsonValidator) {
@@ -24,12 +24,12 @@ void addRule(JsonValidator *v, const char *field, const char *message) {
     v->rules[v->ruleCount].field = strdup(field);
     v->rules[v->ruleCount].message = strdup(message);
 
-    if (v->rules[v->ruleCount].field) {
+    if (!v->rules[v->ruleCount].field) {
         fprintf(stderr, "Fatal: out of memory\n");
         exit(EXIT_FAILURE);
     }
 
-    if (v->rules[v->ruleCount].message) {
+    if (!v->rules[v->ruleCount].message) {
         fprintf(stderr, "Fatal: out of memory\n");
         exit(EXIT_FAILURE);
     }

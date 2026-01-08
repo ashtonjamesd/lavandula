@@ -1,4 +1,4 @@
-#include "include/lavandula.h"
+#include "../include/lavandula.h"
 
 appRoute(home, ctx) {
     if (!ctx.app) exit(1);
