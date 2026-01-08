@@ -126,7 +126,7 @@ int createHomeFile(Project *project) {
         "#include \"../../lavandula/include/lavandula.h\"\n\n"
         "appRoute(home, ctx) {\n"
         "    (void)ctx;\n"
-        "    return ok(\"Hello, World!\", \"text/plain\");\n"
+        "    return ok(\"Hello, World!\", TEXT_PLAIN);\n"
         "}\n";
 
     return createFileWithContent(filepath, content);
