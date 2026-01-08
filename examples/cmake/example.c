@@ -2,6 +2,7 @@
 
 // define a route for your app
 appRoute(home, ctx) {
+    (void)ctx;
     return ok("Hello, World", TEXT_PLAIN);
 }
 
