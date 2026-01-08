@@ -12,6 +12,7 @@
 #include "dotenv.h"
 #include "middleware.h"
 #include "logger.h"
+#include "validate_json_body.h"
 #include "lavandula_test.h"
 #include "json.h"
 #include "cors.h"
