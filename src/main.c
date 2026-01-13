@@ -1,22 +1,6 @@
 #include "include/lavandula.h"
 
-appRoute(test, ctx) {
-    (void)ctx;
-    return ok("Hello, World!", TEXT_PLAIN);
-}
-
 int main(int argc, char *argv[]) {
-    AppBuilder builder = createBuilder();
-    usePort(&builder, 3002);
-
-    App app = build(builder);
-
-    GET(&app, test);
-
-    runApp(&app);
-
-    return 0;
-    
     if (argc < 2) {
         printf("usage: lavu <command> [options]\n");
         return 1;
