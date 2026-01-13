@@ -94,7 +94,6 @@ void* key_listener(void* arg) {
     return NULL;
 }
 
-
 void runServer(App *app) {
     if (!app) return;
 
@@ -278,8 +277,9 @@ void runServer(App *app) {
 
         char *args[] = {"./build/a", NULL};
         execvp(args[0], args);
-        perror("execvp failed");
+        perror("failed to hot restart! ensure the project has './build/a' in the root dir");
         exit(1);
+
     } else if (serverState == STATE_SHUTDOWN) {
         exit(0);
     }

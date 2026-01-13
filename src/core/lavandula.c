@@ -178,8 +178,22 @@ Route options(App *app, char *path, Controller controller) {
     return route(&app->server.router, HTTP_OPTIONS, path, controller);
 }
 
+Route connect(App *app, char *path, Controller controller) {
+    return route(&app->server.router, HTTP_CONNECT, path, controller);
+}
+
+Route head(App *app, char *path, Controller controller) {
+    return route(&app->server.router, HTTP_HEAD, path, controller);
+}
+
+Route trace(App *app, char *path, Controller controller) {
+    return route(&app->server.router, HTTP_TRACE, path, controller);
+}
+
 void resource(App *app, char *resource, Controller (*controllerFactory)()) {
     if (!(app && resource && controllerFactory)) return;
+    
+    // ignored, declared for potential future use
 }
 
 Route routeNotFound(App *app, Controller controller) {

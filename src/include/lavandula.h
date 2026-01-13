@@ -88,12 +88,25 @@ App build(AppBuilder builder);
 void runApp(App *app);
 void cleanupApp(App *app);
 
+#define GET(app, controller) get(app, "/" #controller, controller)
+#define POST(app, controller) post(app, "/" #controller, controller)
+#define PUT(app, controller) put(app, "/" #controller, controller)
+#define DELETE(app, controller) delete(app, "/" #controller, controller)
+#define PATCH(app, controller) patch(app, "/" #controller, controller)
+#define OPTIONS(app, controller) options(app, "/" #controller, controller)
+#define CONNECT(app, controller) connect(app, "/" #controller, controller)
+#define HEAD(app, controller) head(app, "/" #controller, controller)
+#define TRACE(app, controller) trace(app, "/" #controller, controller)
+
 Route get(App *app, char *path, Controller controller);
 Route post(App *app, char *path, Controller controller);
 Route put(App *app, char *path, Controller controller);
 Route delete(App *app, char *path, Controller controller);
 Route patch(App *app, char *path, Controller controller);
 Route options(App *app, char *path, Controller controller);
+Route connect(App *app, char *path, Controller controller);
+Route head(App *app, char *path, Controller controller);
+Route trace(App *app, char *path, Controller controller);
 
 // copy Rails essentially lmao
 void resource(App *app, char *resource, Controller (*controllerFactory)());

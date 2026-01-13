@@ -19,6 +19,9 @@ typedef enum {
     HTTP_PATCH,
     HTTP_DELETE,
     HTTP_OPTIONS,
+    HTTP_CONNECT,
+    HTTP_HEAD,
+    HTTP_TRACE,
 } HttpMethod;
 
 typedef enum {
