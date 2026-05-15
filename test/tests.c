@@ -6,6 +6,7 @@ void run_lexer_tests();
 void run_parser_tests();
 void run_http_tests();
 void run_utils_tests();
+void run_auth_tests();
 
 int main() {
     printf("=== Lavandula Test Suite ===\n\n");
@@ -25,6 +26,9 @@ int main() {
     printf("\n");
     
     run_utils_tests();
+    printf("\n");
+    
+    run_auth_tests();
     printf("\n");
     
     printf("=== Final Test Results ===\n");
