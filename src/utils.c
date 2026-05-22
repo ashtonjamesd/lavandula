@@ -27,3 +27,15 @@ char *readFile(const char *path) {
 
     return buff;
 }
+
+bool constantTimeEquals(const char *a, const char *b) {
+    if (a == NULL || b == NULL) return false;
+    size_t lenA = strlen(a);
+    size_t lenB = strlen(b);
+    if (lenA != lenB) return false;
+    volatile unsigned char result = 0;
+    for (size_t i = 0; i < lenA; i++) {
+        result |= (unsigned char)(a[i] ^ b[i]);
+    }
+    return result == 0;
+}

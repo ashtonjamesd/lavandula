@@ -6,6 +6,7 @@
 #include "include/base64.h"
 #include "include/router.h"
 #include "include/app.h"
+#include "include/utils.h"
 
 BasicAuthenticator initBasicAuth() {
     BasicAuthenticator auth = {
@@ -57,13 +58,13 @@ HttpResponse basicAuth(RequestContext ctx, MiddlewareHandler *n) {
 }
 
 bool checkBasicCredentials(BasicAuthenticator *auth, char *base64) {
+    bool found = false;
     for (int i = 0; i < auth->credentialsCount; i++) {
-        if (strcmp(auth->credentials[i], base64) == 0) {
-            return true;
+        if (constantTimeEquals(auth->credentials[i], base64)) {
+            found = true;
         }
     }
-
-    return false;
+    return found;
 }
 
 void freeBasicAuth(BasicAuthenticator auth) {
