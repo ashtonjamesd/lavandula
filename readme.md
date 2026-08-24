@@ -150,3 +150,7 @@ Some places to start:
 
 Lavandula is registered under the MIT License.
 
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for vulnerability reporting.
